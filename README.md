@@ -1,90 +1,130 @@
-# Microservicio JWT con Redis
+# Cliente GUI para Microservicio JWT
+
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Tkinter](https://img.shields.io/badge/Tkinter-FF6F00?style=for-the-badge&logo=python&logoColor=white)
+![Requests](https://img.shields.io/badge/Requests-2C5F2D?style=for-the-badge&logo=python&logoColor=white)
+![JSON](https://img.shields.io/badge/JSON-000000?style=for-the-badge&logo=json&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 
 ## Descripción
 
-Este proyecto es un microservicio de autenticación basado en JSON Web Tokens (JWT) desarrollado con Flask y Python. Proporciona una API REST completa para gestionar la autenticación de usuarios, incluyendo registro, login, refresh de tokens, logout y acceso a recursos protegidos. Utiliza Redis como sistema de almacenamiento temporal para tokens JWT y MariaDB para datos persistentes de usuarios, con dockerización completa para facilitar el despliegue.
+Este proyecto es una aplicación GUI completa desarrollada en Python utilizando Tkinter como framework principal para la interfaz gráfica. La aplicación sirve como cliente para consumir y gestionar todos los endpoints del microservicio JWT, proporcionando una experiencia visual intuitiva para operaciones de autenticación. Implementa un diseño modular con frames organizados, widgets interactivos, sistema de logging en tiempo real, semáforo visual de estado, y persistencia de configuración y tokens JWT en almacenamiento local.
 
-## Características
+## Características de la GUI Tkinter
 
-- ✅ Registro de usuarios con validación
-- ✅ Autenticación segura con JWT
-- ✅ Sistema de refresh tokens
-- ✅ Revocación inmediata de tokens en logout
-- ✅ Endpoint protegido para recursos autenticados
-- ✅ Health check del servicio con monitoreo de Redis
-- ✅ Redis para almacenamiento rápido de tokens con TTL automático
-- ✅ MariaDB para datos persistentes de usuarios
-- ✅ Dockerización completa con Docker Compose
-- ✅ Logging detallado para debugging
-- ✅ Adminer incluido para gestión de BD
-- ✅ Script de pruebas automatizadas
+- ✅ **Interfaz Modular**: Frames organizados (ttk.LabelFrame) para cada funcionalidad
+- ✅ **Widgets Interactivos**: Botones, entradas de texto, y controles ttk estilizados
+- ✅ **Sistema de Logging Visual**: ScrolledText con timestamps para seguimiento en tiempo real
+- ✅ **Semáforo Dinámico**: Canvas con círculos de colores que cambian según estado del servicio
+- ✅ **Treeview para Datos**: Tabla estructurada para mostrar lista de usuarios
+- ✅ **Validación de Formularios**: Verificación de campos requeridos con messagebox
+- ✅ **Feedback Visual Inmediato**: Labels que muestran tokens actuales y estado
+- ✅ **Configuración Persistente**: Campos de entrada que cargan y guardan configuración
+- ✅ **Hilos para Responsividad**: Threading para operaciones de red sin bloquear la UI
+- ✅ **Manejo de Eventos**: Callbacks asociados a botones con lógica de negocio
+- ✅ **Layout Responsivo**: Grid system con weights para expansión adecuada
+- ✅ **Colores y Estilos**: Tema ttk con colores significativos (azul para access, verde para refresh)
 
-## Arquitectura
+## Diseño de la Interfaz Tkinter
+
+La aplicación utiliza Tkinter para crear una interfaz gráfica moderna y funcional, organizada en frames y widgets que facilitan la interacción con el microservicio JWT.
+
+### Layout de la GUI
 
 ```mermaid
-graph TB
-    A[Cliente HTTP] --> B[Flask App :5000]
-    B --> C[(MariaDB :3306 - Usuarios)]
-    B --> D[(Redis :6379 - Tokens)]
-    E[Adminer :8080] --> C
+graph TD
+    A[Ventana Principal 800x600] --> B[Frame Configuración]
+    A --> C[Frame Registro]
+    A --> D[Frame Login]
+    A --> E[Frame Estado del Servicio]
+    A --> F[Frame Acciones Autenticadas]
+    A --> G[Frame Gestión de Usuarios]
+    A --> H[Frame Log de Operaciones]
+    A --> I[Frame Información de Tokens]
+
+    B --> B1[Entry IP]
+    B --> B2[Entry Puerto]
+    B --> B3[Button Guardar Config]
+
+    C --> C1[Entry Usuario]
+    C --> C2[Entry Email]
+    C --> C3[Entry Contraseña]
+    C --> C4[Button Registrar]
+
+    D --> D1[Entry Usuario]
+    D --> D2[Entry Contraseña]
+    D --> D3[Button Login]
+
+    E --> E1[Label Estado]
+    E --> E2[Canvas Semáforo]
+
+    F --> F1[Button Acceder Protegido]
+    F --> F2[Button Refresh Token]
+    F --> F3[Button Logout]
+
+    G --> G1[Button Ver Usuarios]
+    G --> G2[Entry ID Usuario]
+    G --> G3[Button Eliminar Usuario]
+    G --> G4[Treeview Usuarios]
+
+    H --> H1[ScrolledText Log]
+
+    I --> I1[Label Access Token]
+    I --> I2[Label Refresh Token]
 ```
 
-### Componentes
+### Componentes Tkinter Utilizados
 
-- **Flask App**: API REST principal que maneja todas las operaciones de autenticación
-- **Redis**: Base de datos en memoria para almacenamiento temporal de tokens JWT con expiración automática
-- **MariaDB**: Base de datos relacional para almacenar datos persistentes de usuarios
-- **Adminer**: Interfaz web para gestión y consulta de la base de datos
-- **JWT**: Sistema de tokens para autenticación stateless
+- **ttk.Frame**: Contenedores organizados para seccionar la interfaz
+- **ttk.LabelFrame**: Frames con títulos descriptivos
+- **ttk.Entry**: Campos de texto para entrada de datos
+- **ttk.Button**: Botones interactivos con comandos asociados
+- **tk.Canvas**: Dibujo del semáforo de salud
+- **ttk.Treeview**: Tabla para mostrar lista de usuarios
+- **scrolledtext.ScrolledText**: Área de texto con scroll para logs
+- **tk.Tk**: Ventana principal de la aplicación
 
-## Flujo de Autenticación JWT
+### Gestión de Eventos
+
+- **Command callbacks**: Cada botón ejecuta un método específico
+- **Threading**: Health checks en hilo separado para no bloquear UI
+- **Event loop**: Mainloop de Tkinter maneja todos los eventos
+- **State management**: Variables de instancia mantienen el estado de la aplicación
+
+## Flujo de Interacción GUI
 
 ```mermaid
-sequenceDiagram
-    participant U as Usuario
-    participant A as API Flask
-    participant DB as MariaDB
-    participant R as Redis
+stateDiagram-v2
+    [*] --> Inicialización
+    Inicialización --> Configuración: Cargar config local
+    Configuración --> HealthCheck: Iniciar verificación automática
+    HealthCheck --> EsperandoInteracción: Semáforo actualizado
 
-    U->>A: POST /register
-    A->>DB: Insertar usuario
-    DB-->>A: Usuario creado
-    A-->>U: Usuario registrado
+    EsperandoInteracción --> Registro: Click Registrar
+    Registro --> EsperandoInteracción: Usuario registrado
 
-    U->>A: POST /login
-    A->>DB: Verificar credenciales
-    DB-->>A: Usuario válido
-    A->>R: Almacenar tokens con TTL
-    R-->>A: Tokens guardados
-    A-->>U: access_token + refresh_token
+    EsperandoInteracción --> Login: Click Login
+    Login --> Autenticado: Tokens guardados
 
-    U->>A: GET /protected (con access_token)
-    A->>R: Verificar token existe
-    R-->>A: Token válido
-    A-->>U: Datos protegidos
+    Autenticado --> Protegido: Click Acceder Protegido
+    Protegido --> Autenticado: Datos mostrados
 
-    U->>A: POST /refresh (con refresh_token)
-    A->>R: Verificar refresh_token
-    R-->>A: Token válido
-    A->>R: Actualizar access_token
-    R-->>A: Token actualizado
-    A-->>U: nuevo access_token
+    Autenticado --> Refresh: Click Refresh Token
+    Refresh --> Autenticado: Tokens actualizados
 
-    U->>A: POST /logout (con access_token)
-    A->>R: Eliminar tokens
-    R-->>A: Tokens eliminados
-    A-->>U: Logout exitoso
+    Autenticado --> Logout: Click Logout
+    Logout --> EsperandoInteracción: Tokens limpiados
+
+    Autenticado --> GestionUsuarios: Click Ver Usuarios
+    GestionUsuarios --> Autenticado: Lista actualizada
 ```
 
 ## Prerrequisitos
 
-- Docker (versión 20.10 o superior)
-- Docker Compose (versión 1.29 o superior)
-- Puertos disponibles:
-  - Puerto 5000 (API Flask)
-  - Puerto 3306 (MariaDB)
-  - Puerto 6379 (Redis)
-  - Puerto 8080 (Adminer)
+- Python 3.7 o superior
+- Tkinter (incluido en la mayoría de instalaciones Python)
+- Microservicio JWT corriendo (puerto 5000 por defecto)
+- Puertos disponibles para el microservicio
 
 ## Instalación
 
@@ -94,334 +134,172 @@ sequenceDiagram
    cd jwt-microservice
    ```
 
-2. **Configura las variables de entorno**
+2. **Instala dependencias**
    ```bash
-   cp .env.example .env  # Si existe, o crea .env con las variables
+   pip install requests
    ```
 
-3. **Construye y ejecuta los contenedores**
+3. **Ejecuta la aplicación**
    ```bash
-   docker-compose up --build
+   python jwt_gui.py
    ```
-
-4. **Verifica que los servicios estén corriendo**
-   - API: http://localhost:5000/health
-   - Adminer: http://localhost:8080
 
 ## Configuración
 
-### Variables de Entorno (.env)
+### Archivo de Configuración (jwt_gui_config.json)
 
-```env
-# Configuración de Base de Datos
-DB_HOST=mariadb
-DB_PORT=3306
-DB_USER=jwt_user
-DB_PASSWORD=jwt_password
-DB_NAME=jwt_auth
+La aplicación crea automáticamente un archivo `jwt_gui_config.json` para almacenar:
 
-# Configuración JWT
-JWT_SECRET_KEY=UDEM
-ACCESS_TOKEN_EXPIRES_MINUTES=15
-REFRESH_TOKEN_EXPIRES_DAYS=7
-
-# Configuración Redis
-REDIS_HOST=redis
-REDIS_PORT=6379
-REDIS_PASSWORD=redis_password
-REDIS_MAXMEMORY=256mb
-REDIS_MAXMEMORY_POLICY=allkeys-lru
+```json
+{
+  "ip": "localhost",
+  "port": "5000",
+  "endpoints": {
+    "register": "/register",
+    "login": "/login",
+    "refresh": "/refresh",
+    "logout": "/logout",
+    "protected": "/protected",
+    "health": "/health",
+    "users": "/users",
+    "delete_user": "/users/"
+  },
+  "access_token": "",
+  "refresh_token": ""
+}
 ```
 
-### Descripción de Variables
+### Configuración Inicial
 
-- **DB_HOST**: Host de la base de datos (por defecto: mariadb)
-- **DB_PORT**: Puerto de la base de datos (por defecto: 3306)
-- **DB_USER**: Usuario de la base de datos
-- **DB_PASSWORD**: Contraseña del usuario
-- **DB_NAME**: Nombre de la base de datos
-- **JWT_SECRET_KEY**: Clave secreta para firmar los tokens JWT
-- **ACCESS_TOKEN_EXPIRES_MINUTES**: Tiempo de expiración del access token en minutos
-- **REFRESH_TOKEN_EXPIRES_DAYS**: Tiempo de expiración del refresh token en días
-- **REDIS_HOST**: Host de Redis (por defecto: redis)
-- **REDIS_PORT**: Puerto de Redis (por defecto: 6379)
-- **REDIS_PASSWORD**: Contraseña de Redis
-- **REDIS_MAXMEMORY**: Memoria máxima para Redis (por defecto: 256mb)
-- **REDIS_MAXMEMORY_POLICY**: Política de eviction de Redis (por defecto: allkeys-lru)
+- **IP**: Dirección del microservicio (por defecto: localhost)
+- **Puerto**: Puerto del microservicio (por defecto: 5000)
+- **Endpoints**: URLs de los servicios REST
 
 ## Uso
 
-### Acceso a los Servicios
+### Interfaz de la GUI
 
-- **API del Microservicio**: http://localhost:5000
-- **Adminer (Gestión BD)**: http://localhost:8080
-  - Usuario: jwt_user
-  - Contraseña: jwt_password
-  - Base de datos: jwt_auth
+La aplicación se divide en secciones organizadas:
 
-### Endpoints de la API
+1. **Configuración del Microservicio**: Campos para IP y puerto
+2. **Estado del Microservicio**: Semáforo visual con indicador de salud
+3. **Registro de Usuario**: Campos para crear nueva cuenta
+4. **Inicio de Sesión**: Campos para autenticación
+5. **Acciones Autenticadas**: Botones para operaciones con tokens
+6. **Gestión de Usuarios**: Ver y eliminar usuarios
+7. **Log de Operaciones**: Historial detallado de todas las acciones
+8. **Información de Tokens JWT**: Display de tokens actuales
 
-#### 1. Registro de Usuario
-**POST** `/register`
+### Semáforo de Salud
 
-Registra un nuevo usuario en el sistema.
+- 🔴 **Rojo**: Microservicio no funciona
+- 🟠 **Naranja**: Procesando verificación
+- 🟢 **Verde**: Microservicio saludable
 
-**Request Body:**
-```json
-{
-  "username": "usuario_ejemplo",
-  "email": "usuario@example.com",
-  "password": "contraseña_segura"
-}
-```
+### Funcionalidades Principales
 
-**Response (201):**
-```json
-{
-  "message": "User registered successfully",
-  "user_id": 1
-}
-```
+#### Registro de Usuario
+- Campos: Usuario, Email, Contraseña
+- Validación de campos requeridos
+- Logging de la solicitud y respuesta
 
-#### 2. Login
-**POST** `/login`
+#### Login
+- Campos: Usuario, Contraseña
+- Almacenamiento automático de tokens
+- Actualización de labels de tokens
 
-Autentica al usuario y devuelve tokens JWT.
+#### Acceso Protegido
+- Requiere token de acceso válido
+- Muestra datos protegidos en log
 
-**Request Body:**
-```json
-{
-  "username": "usuario_ejemplo",
-  "password": "contraseña_segura"
-}
-```
+#### Refresh Token
+- Utiliza refresh token para obtener nuevo access token
+- Actualiza tokens almacenados
 
-**Response (200):**
-```json
-{
-  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-  "token_type": "Bearer",
-  "expires_in": 900,
-  "message": "Login successful"
-}
-```
+#### Logout
+- Revoca tokens en el servidor
+- Limpia tokens locales
 
-#### 3. Refresh Token
-**POST** `/refresh`
+#### Gestión de Usuarios
+- Ver lista completa de usuarios
+- Eliminar usuarios (solo el propio usuario)
 
-Renueva el access token usando el refresh token.
+## Tecnologías GUI Utilizadas
 
-**Request Body:**
-```json
-{
-  "refresh_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
-}
-```
+- **Tkinter**: Framework estándar de Python para interfaces gráficas
+- **ttk (Themed Tkinter)**: Widgets modernos y estilizados
+- **tk.Canvas**: Para dibujar elementos gráficos (semáforo)
+- **scrolledtext.ScrolledText**: Área de texto con barras de scroll
+- **ttk.Treeview**: Widget de tabla para datos estructurados
+- **Threading**: Para mantener la responsividad de la interfaz
+- **Python Requests**: Cliente HTTP integrado con la GUI
+- **JSON**: Persistencia de configuración y tokens
+- **Datetime**: Timestamps para logging visual
 
-**Response (200):**
-```json
-{
-  "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...",
-  "token_type": "Bearer",
-  "expires_in": 900,
-  "message": "Token refreshed successfully"
-}
-```
+## Mejores Prácticas Implementadas
 
-#### 4. Logout
-**POST** `/logout`
+### Código
+- **Constantes**: Definición de constantes para valores fijos
+- **Manejo de Errores**: Try-except comprehensivo en todas las operaciones HTTP
+- **Separación de Responsabilidades**: Métodos dedicados para cada funcionalidad
+- **Logging Detallado**: Seguimiento completo de operaciones
+- **Configuración Persistente**: Almacenamiento local de estado
 
-Revoca el token actual del usuario.
+### Interfaz
+- **Diseño Intuitivo**: Layout organizado con frames lógicos
+- **Feedback Visual**: Semáforo, colores y mensajes de estado
+- **Validación**: Verificación de campos requeridos
+- **Responsividad**: No bloquea la UI durante operaciones
 
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
-
-**Response (200):**
-```json
-{
-  "message": "Logged out successfully"
-}
-```
-
-#### 5. Endpoint Protegido
-**GET** `/protected`
-
-Accede a recursos que requieren autenticación.
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
-
-**Response (200):**
-```json
-{
-  "message": "This is a protected endpoint",
-  "user_id": 1,
-  "data": "Secret data only for authenticated users"
-}
-```
-
-#### 6. Health Check
-**GET** `/health`
-
-Verifica el estado del servicio, la conexión a la base de datos y Redis.
-
-**Response (200):**
-```json
-{
-  "status": "healthy",
-  "database": "connected",
-  "redis": "connected",
-  "tables": ["users"],
-  "redis_tokens": 5,
-  "note": "Tokens managed in Redis, not database",
-  "timestamp": "2024-01-01T12:00:00.000000"
-}
-```
-
-#### 7. Listar Usuarios
-**GET** `/users`
-
-Obtiene la lista de todos los usuarios registrados (requiere autenticación).
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
-
-**Response (200):**
-```json
-{
-  "users": [
-    {
-      "id": 1,
-      "username": "usuario1",
-      "email": "usuario1@example.com",
-      "created_at": "2024-01-01 12:00:00"
-    }
-  ]
-}
-```
-
-#### 8. Eliminar Usuario
-**DELETE** `/users/<user_id>`
-
-Elimina un usuario (solo el propio usuario puede eliminarse a sí mismo).
-
-**Headers:**
-```
-Authorization: Bearer <access_token>
-```
-
-**Response (200):**
-```json
-{
-  "message": "User deleted successfully"
-}
-```
-
-## Pruebas
-
-El proyecto incluye un script de pruebas automatizadas que verifica todas las funcionalidades.
-
-### Ejecutar Pruebas
-
-```bash
-# Asegúrate de que los servicios estén corriendo
-python test_jwt.py
-```
-
-### Qué Prueba el Script
-
-- ✅ Salud del servicio
-- ✅ Registro de usuario
-- ✅ Login exitoso
-- ✅ Acceso a endpoint protegido
-- ✅ Refresh de token
-- ✅ Logout y revocación
-- ✅ Verificación de que el token fue revocado
-- ✅ Obtener lista de usuarios
-- ✅ Eliminar usuario
-
-### Pruebas Manuales
-
-También puedes usar herramientas como Postman o curl. Consulta el archivo `commands-tests.txt` para ejemplos detallados de requests.
-
-## Despliegue en Producción
-
-### Consideraciones de Seguridad
-
-1. **Cambia la JWT_SECRET_KEY** por una clave segura y única
-2. **Configura REDIS_PASSWORD** con una contraseña fuerte
-3. **Usa HTTPS** en producción
-4. **Configura contraseñas fuertes** para la base de datos
-5. **Aísla la red de Redis** - no expongas el puerto 6379 públicamente
-6. **Configura REDIS_MAXMEMORY** según tus necesidades de carga
-7. **Implementa rate limiting** para prevenir ataques de fuerza bruta
-8. **Monitorea logs** para detectar actividades sospechosas
-9. **Habilita persistencia de Redis** para recuperación ante fallos
-
-### Variables de Producción
-
-```env
-JWT_SECRET_KEY=tu_clave_secreta_muy_segura_aqui
-DB_PASSWORD=contraseña_muy_segura
-REDIS_PASSWORD=redis_password_muy_segura
-REDIS_MAXMEMORY=512mb
-```
-
-### Comando de Despliegue
-
-```bash
-docker-compose -f docker-compose.yml up -d --build
-```
+### Seguridad
+- **Almacenamiento Seguro**: Tokens en archivo local (no en memoria volátil)
+- **Timeouts**: Límites de tiempo para evitar hangs
+- **Validación de Tokens**: Verificación antes de operaciones
+- **Limpieza**: Eliminación de tokens en logout
 
 ## Estructura del Proyecto
 
 ```
 jwt-microservice/
-├── app.py                 # Aplicación Flask principal con integración Redis
-├── test_jwt.py           # Script de pruebas automatizadas
-├── commands-tests.txt    # Ejemplos de requests para testing manual
-├── requirements.txt      # Dependencias Python (incluye redis-py)
-├── Dockerfile           # Dockerfile para la aplicación Flask
-├── Dockerfile.mariadb   # Dockerfile personalizado para MariaDB
-├── docker-compose.yml   # Configuración Docker Compose con Redis
-├── init.sql            # Script de inicialización BD (solo tabla users)
-├── .env                # Variables de entorno (DB, JWT, Redis)
-└── README.md           # Este archivo
+├── jwt_gui.py              # Aplicación GUI principal
+├── jwt_gui_config.json     # Configuración persistente (generado)
+├── README_GUI.md          # Este archivo
+└── README.md              # README del microservicio
 ```
 
-## Tecnologías Utilizadas
+## Beneficios de Tkinter en la Implementación
 
-- **Flask**: Framework web para Python
-- **PyJWT**: Librería para manejo de JWT
-- **Redis**: Base de datos en memoria para tokens con expiración automática
-- **PyMySQL**: Conector MySQL para Python
-- **MariaDB**: Base de datos relacional para datos persistentes
-- **Docker**: Contenedorización completa
-- **Adminer**: Interfaz web para gestión de bases de datos
+### Experiencia de Usuario
+- **Interfaz Nativa**: Widgets ttk con apariencia nativa del sistema operativo
+- **Navegación Intuitiva**: Frames organizados lógicamente por funcionalidad
+- **Feedback Visual**: Semáforo, colores y estados que cambian dinámicamente
+- **Accesibilidad**: Labels descriptivos y validación de entradas
 
-## Beneficios de Redis para JWT
+### Desarrollo con Tkinter
+- **Sin Dependencias Externas**: Tkinter incluido en Python estándar
+- **Event-Driven Programming**: Arquitectura basada en eventos y callbacks
+- **Threading Integrado**: Mantiene UI responsiva durante operaciones de red
+- **Layout Management**: Sistema de grid flexible y potente
 
-### Rendimiento
-- **Validación ultra-rápida**: Operaciones O(1) para verificar tokens
-- **Sin consultas a BD**: Reducción del 90% en carga de base de datos para autenticación
-- **Escalabilidad**: Manejo eficiente de miles de tokens concurrentes
+### Ventajas Técnicas
+- **Modularidad**: Cada frame es un componente independiente
+- **Reutilización**: Widgets configurables para diferentes contextos
+- **Persistencia Visual**: Estado de la interfaz refleja estado de la aplicación
+- **Debugging Visual**: Log integrado permite seguimiento inmediato de operaciones
 
-### Seguridad y Gestión
-- **Expiración automática**: Tokens se eliminan automáticamente al vencer TTL
-- **Revocación inmediata**: Logout elimina tokens instantáneamente
-- **Sin estado persistente**: Tokens no quedan en base de datos después de logout
+## Solución de Problemas
 
-### Arquitectura
-- **Separación de responsabilidades**: Redis para datos efímeros, MariaDB para datos persistentes
-- **Alta disponibilidad**: Redis con persistencia y configuración de memoria
-- **Monitoreo integrado**: Health checks incluyen estado de Redis y conteo de tokens
+### Problema: Botón Refresh Token no funciona
+**Solución**: Verificar que el microservicio esté corriendo y accesible. Revisar logs en la GUI para detalles del error.
+
+### Problema: Semáforo siempre rojo
+**Solución**: Verificar configuración de IP/puerto. Asegurarse que el endpoint `/health` responda correctamente.
+
+### Problema: Tokens no se guardan
+**Solución**: Verificar permisos de escritura en el directorio. El archivo `jwt_gui_config.json` debe ser modificable.
+
+### Problema: Error de conexión
+**Solución**: Verificar que el microservicio esté ejecutándose en el puerto configurado. Revisar firewalls y configuraciones de red.
 
 ## Contribución
 
@@ -439,9 +317,9 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 
 Si encuentras problemas o tienes preguntas:
 
-1. Revisa los logs de la aplicación
-2. Verifica la configuración de las variables de entorno
-3. Consulta el endpoint `/health` para verificar el estado
-4. Revisa las pruebas automatizadas
+1. Revisa los logs en la aplicación GUI
+2. Verifica la configuración de IP/puerto
+3. Asegúrate que el microservicio esté corriendo
+4. Consulta el README del microservicio para detalles de la API
 
-¡El microservicio JWT con Redis está listo para usar! 🚀
+¡El cliente GUI para JWT Microservice está listo para usar! 🚀
