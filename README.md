@@ -29,50 +29,6 @@ Este proyecto es una aplicación GUI completa desarrollada en Python utilizando 
 
 La aplicación utiliza Tkinter para crear una interfaz gráfica moderna y funcional, organizada en frames y widgets que facilitan la interacción con el microservicio JWT.
 
-### Layout de la GUI
-
-```mermaid
-graph TD
-    A[Ventana Principal 800x600] --> B[Frame Configuración]
-    A --> C[Frame Registro]
-    A --> D[Frame Login]
-    A --> E[Frame Estado del Servicio]
-    A --> F[Frame Acciones Autenticadas]
-    A --> G[Frame Gestión de Usuarios]
-    A --> H[Frame Log de Operaciones]
-    A --> I[Frame Información de Tokens]
-
-    B --> B1[Entry IP]
-    B --> B2[Entry Puerto]
-    B --> B3[Button Guardar Config]
-
-    C --> C1[Entry Usuario]
-    C --> C2[Entry Email]
-    C --> C3[Entry Contraseña]
-    C --> C4[Button Registrar]
-
-    D --> D1[Entry Usuario]
-    D --> D2[Entry Contraseña]
-    D --> D3[Button Login]
-
-    E --> E1[Label Estado]
-    E --> E2[Canvas Semáforo]
-
-    F --> F1[Button Acceder Protegido]
-    F --> F2[Button Refresh Token]
-    F --> F3[Button Logout]
-
-    G --> G1[Button Ver Usuarios]
-    G --> G2[Entry ID Usuario]
-    G --> G3[Button Eliminar Usuario]
-    G --> G4[Treeview Usuarios]
-
-    H --> H1[ScrolledText Log]
-
-    I --> I1[Label Access Token]
-    I --> I2[Label Refresh Token]
-```
-
 ### Componentes Tkinter Utilizados
 
 - **ttk.Frame**: Contenedores organizados para seccionar la interfaz
