@@ -10,6 +10,17 @@
 
 Este proyecto es una aplicación GUI completa desarrollada en Python utilizando Tkinter como framework principal para la interfaz gráfica. La aplicación sirve como cliente para consumir y gestionar todos los endpoints del microservicio JWT, proporcionando una experiencia visual intuitiva para operaciones de autenticación. Implementa un diseño modular con frames organizados, widgets interactivos, sistema de logging en tiempo real, semáforo visual de estado, y persistencia de configuración y tokens JWT en almacenamiento local.
 
+## Arquitectura del Sistema
+
+```mermaid
+graph TB
+    A[Tkinter GUI] --> B[Requests Module]
+    B --> C[Flask Microservice :5000]
+    C --> D[(MariaDB :3306)]
+    C --> E[JWT Tokens]
+    A --> F[(JSON Config File)]
+```
+
 ## Características de la GUI Tkinter
 
 - ✅ **Interfaz Modular**: Frames organizados (ttk.LabelFrame) para cada funcionalidad
