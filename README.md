@@ -243,16 +243,3 @@ jwt-microservice/
 - **Persistencia Visual**: Estado de la interfaz refleja estado de la aplicación
 - **Debugging Visual**: Log integrado permite seguimiento inmediato de operaciones
 
-## Solución de Problemas
-
-### Problema: Botón Refresh Token no funciona
-**Solución**: Verificar que el microservicio esté corriendo y accesible. Revisar logs en la GUI para detalles del error.
-
-### Problema: Semáforo siempre rojo
-**Solución**: Verificar configuración de IP/puerto. Asegurarse que el endpoint `/health` responda correctamente.
-
-### Problema: Tokens no se guardan
-**Solución**: Verificar permisos de escritura en el directorio. El archivo `jwt_gui_config.json` debe ser modificable.
-
-### Problema: Error de conexión
-**Solución**: Verificar que el microservicio esté ejecutándose en el puerto configurado. Revisar firewalls y configuraciones de red.
