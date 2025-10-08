@@ -256,26 +256,3 @@ jwt-microservice/
 
 ### Problema: Error de conexión
 **Solución**: Verificar que el microservicio esté ejecutándose en el puerto configurado. Revisar firewalls y configuraciones de red.
-
-## Contribución
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
-3. Commit tus cambios (`git commit -am 'Agrega nueva funcionalidad'`)
-4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
-5. Abre un Pull Request
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
-
-## Soporte
-
-Si encuentras problemas o tienes preguntas:
-
-1. Revisa los logs en la aplicación GUI
-2. Verifica la configuración de IP/puerto
-3. Asegúrate que el microservicio esté corriendo
-4. Consulta el README del microservicio para detalles de la API
-
-¡El cliente GUI para JWT Microservice está listo para usar! 🚀
